@@ -1,6 +1,7 @@
 /* eslint-disable */
 var path = require('path')
 var webpack = require('webpack')
+
 module.exports = {
   output: {
     path: path.resolve(__dirname, '/dist' ),
@@ -9,8 +10,8 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new wepack.DefinePlugin({
-      ENV: JSON.stringify('development')
+    new webpack.DefinePlugin({
+      SERVER_URL: JSON.stringify('http://localhost:3000')
     })
   ],
   module: {

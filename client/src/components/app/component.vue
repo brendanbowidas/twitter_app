@@ -2,18 +2,21 @@
   <div>
     <h1 class="text-center">{{msg}}</h1>
     <div class="red text-center">hi</div>
-    <test></test>
+    <searchbar></searchbar>
+    <tweets-container></tweets-container>
   </div>
 </template>
 
 <script>
-import test from '../test/component.vue'
+import searchbar from '../searchbar/component.vue'
+import tweetsContainer from '../tweets_container/component.vue'
+
 export default {
   data() {
     return {
       msg: 'hello world',
     }
   },
-  components: { test },
+  components: { searchbar, tweetsContainer },
 }
 </script>

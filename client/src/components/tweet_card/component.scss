@@ -1,0 +1,45 @@
+
+.tweet-card {
+  border: 1px solid #CCD6DD;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 10px;
+}
+
+.tweet-card h6 {
+  font-style: italic;
+  font-weight: lighter;
+
+}
+
+.name-container {
+  padding-left: 0;
+}
+
+h3.name.columns {
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+h6.screen-name {
+  margin-left: 0;
+  padding-left: 0;
+  margin: 0;
+}
+
+#profile-image {
+  padding-right: 0;
+  margin-right: 5px;
+}
+.text-container p {
+  margin-top: 20.800px;
+}
+
+.fa.fa-heart {
+  color: #E81C4F;
+
+}
+
+.fa.fa-retweet {
+  color: #19CF86;
+}
