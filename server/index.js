@@ -9,7 +9,8 @@ const PORT = process.env.PORT
 const app = express()
 
 const getToken = require('./twitter.js').getToken
-const getTweets = require('./twitter.js').getTweets
+const getUserTweets = require('./twitter.js').getUserTweets
+const tweetsBySearchTerm = require('./twitter.js').tweetsBySearchTerm
 
 // enable body parsing middleware
 app.use(json)
@@ -21,13 +22,26 @@ app.get('/', (req, res) => {
   res.send('hello world')
 })
 
-app.get('/tweets/:user', (req, res) => {
-  getTweets(req.params.user, 20, app.get('bearer_token'), (tweets) => {
+app.get('/user-tweets/:user', (req, res) => {
+  getUserTweets(req.params.user, 20, app.get('bearer_token'), (tweets) => {
     res.send(tweets)
   })
 
 })
 
+app.get('/term/:term', (req, res) => {
+  tweetsBySearchTerm(req.params.term, 20, app.get('bearer_token'), req.query.geo, (tweets) => {
+    res.send(tweets)
+  })
+})
+
+app.get('/location/:location', (req, res) => {
+  const term = encodeURIComponent(req.params.location)
+  console.log(term);
+  tweetsByGeo({ query: term, max_results: 20}, (tweets) => {
+    res.send(tweets)
+  })
+})
 
 // get OAuth bearer token for twitter API, then start the app
 getToken((token) => {

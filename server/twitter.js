@@ -1,9 +1,12 @@
 require('dotenv').config()
 const OAuth = require('oauth').OAuth2
 const https = require('https')
+const geocoder = require('geocoder')
+const co = require('co')
 
 const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
   'https://api.twitter.com/', null, 'oauth2/token', null)
+
 
 
   /**
@@ -37,7 +40,7 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
           screen_name: tweet.user.screen_name,
           timestamp: tweet.created_at,
           text: tweet.text,
-          image: tweet.user.profile_image_url,
+          image: tweet.user.profile_image_url_https,
           favorites: tweet.favorite_count,
           retweets: tweet.retweet_count
         }
@@ -56,6 +59,7 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
 
   }
 
+// TODO: clean up the duplicate https code
 
   /**
   * Retrieves a list of tweets for a given user
@@ -66,7 +70,7 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
   * @param {Function<Array>} cb - callback function
   *
   */
-  function getTweets(username, count, token, cb) {
+  function getUserTweets(username, count, token, cb) {
     const options = {
       hostname: 'api.twitter.com',
       path: `/1.1/statuses/user_timeline.json?count=${count}&screen_name=${username}&exclude_replies=true`,
@@ -88,7 +92,49 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
     })
   }
 
+  function tweetsBySearchTerm(query, count, token, geo, cb) {
+    let geocoded = null
+    if (geo) {
+      co(function* () {
+         geocoded = yield geocode(geo)
+      })
+    }
+
+    const options = {
+      hostname: 'api.twitter.com',
+      path: `/1.1/search/tweets.json?count=${count}&q=${encodeURIComponent(query)}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    if (geocoded) {
+      options.path.concat(`&geocode=${geocoded}`)
+    }
+    https.get(options, (result) => {
+      let buffer = ''
+      result.setEncoding('utf8')
+      result.on('data', (data) => {
+        buffer += data
+      })
+      result.on('end', () => {
+        const tweets = JSON.parse(buffer)
+        console.log(tweets);
+        const formattedTweets = formatTweets(tweets.statuses)
+        cb(formattedTweets)
+      })
+    })
+  }
+
+
+  function geocode(query) {
+    geocoder.geocode(query, (err, data) => {
+      if (err) return false
+      const results = data.results[0].geometry.location
+      return `${results.lat},${results.lng},10mi`
+    })
+  }
 
 
 
-  module.exports = { getToken, getTweets }
+
+  module.exports = { getToken, getUserTweets, tweetsBySearchTerm }
