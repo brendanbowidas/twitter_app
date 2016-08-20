@@ -32,12 +32,12 @@ app.get('/tweets/:user', (req, res) => {
 // get OAuth bearer token for twitter API, then start the app
 getToken((token) => {
   if (token) {
+    // give us global access to the token
     app.set('bearer_token', token)
   }
-  //console.log(app.get('bearer_token'));
   // fire up the server
   app.listen(PORT, (err, conn) => {
     if (err) console.log(err)
-    console.log(`server listeing on port ${PORT}`);
+    console.log(`server listening on port ${PORT}`);
   })
 })

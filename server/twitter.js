@@ -27,20 +27,31 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
   * Formats each tweet to return only the information we need for the client app
   *
   * @param {Array<Object>} tweets
-  * @returns {Array<Object>}
+  * @returns {Array<Object>|String}
   */
  function formatTweets(tweets) {
-   return tweets.map((tweet) => {
-     return {
-       name: tweet.user.name,
-       screen_name: tweet.user.screen_name,
-       timestamp: tweet.created_at,
-       text: tweet.text,
-       image: tweet.profile_image_url,
-       favorites: tweet.favorite_count,
-       retweets: tweet.retweet_count
-     }
-   })
+   if (tweets.length) {
+     return tweets.map((tweet) => {
+       return {
+         name: tweet.user.name,
+         screen_name: tweet.user.screen_name,
+         timestamp: tweet.created_at,
+         text: tweet.text,
+         image: tweet.profile_image_url,
+         favorites: tweet.favorite_count,
+         retweets: tweet.retweet_count
+       }
+     })
+   }
+   // if tweets are an empty array
+   if (Array.isArray(tweets) && tweets.length === 0) {
+     return "This user hasn't tweeted yet!"
+   }
+   // if an error response is send back from the API
+   if (typeof tweets === 'object' && tweets.error && tweets.error === 'Not authorized.') {
+     return "Invalid username"
+   }
+
  }
 
 
