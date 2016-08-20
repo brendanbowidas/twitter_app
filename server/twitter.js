@@ -59,7 +59,8 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
 
   }
 
-// TODO: clean up the duplicate https code
+// TODO: clean up the duplicate https code, client side error handling
+
 
   /**
   * Retrieves a list of tweets for a given user
@@ -86,6 +87,7 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
       })
       result.on('end', () => {
         const tweets = JSON.parse(buffer)
+        console.log(tweets.length);
         const formattedTweets = formatTweets(tweets)
         cb(formattedTweets)
       })
@@ -118,7 +120,6 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
       })
       result.on('end', () => {
         const tweets = JSON.parse(buffer)
-        console.log(tweets);
         const formattedTweets = formatTweets(tweets.statuses)
         cb(formattedTweets)
       })
@@ -133,8 +134,6 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
       return `${results.lat},${results.lng},10mi`
     })
   }
-
-
 
 
   module.exports = { getToken, getUserTweets, tweetsBySearchTerm }

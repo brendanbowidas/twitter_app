@@ -3,8 +3,11 @@
     <input type="text" v-model="term" @keyup.enter="selectedFilter">
     <label>Search By:
       <select v-model="selectedFilter">
-        <option v-for="filter in filters" :value="filter.method">{{filter.name}}</option>
+        <option v-for="filter in filters" :selected="filter.name === 'Username'" :value="filter.method">{{filter.name}}</option>
       </select>
+    </label>
+    <label>How many tweets?
+      <input type="number" value="20" min="1" max="100" v-model="count">
     </label>
     <a class="button primary" @click="getUserTweets">search</a>
   </div>
@@ -12,14 +15,15 @@
 
 <script>
 import './component.scss'
-import { setTweets } from '../../state_management/actions'
+import { setTweets, clearTweets } from '../../state_management/actions'
 export default {
   vuex: {
-    actions: { setTweets },
+    actions: { setTweets, clearTweets },
   },
   data() {
     return {
       term: null,
+      count: 1,
       filters: [
         {
           name: 'Username',
@@ -36,7 +40,8 @@ export default {
   methods: {
     getUserTweets() {
       if (this.term) {
-        this.$http.get(`user-tweets/${this.term}`)
+        this.clearTweets()
+        this.$http.get(`user-tweets/${this.term}?count=${this.count}`)
         .then(response => {
           this.setTweets(response.data)
         })
@@ -44,7 +49,8 @@ export default {
     },
     searchByTerm() {
       if (this.term) {
-        this.$http.get(`term/${this.term}`)
+        this.clearTweets()
+        this.$http.get(`term/${this.term}?count=${this.count}`)
         .then(response => {
           this.setTweets(response.data)
         })
