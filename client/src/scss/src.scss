@@ -1,0 +1,12 @@
+@charset 'utf-8';
+@import "../../scss/base";
+@import "../../scss/settings";
+
+
+h1 {
+  font-family: $header-font-family
+}
+
+ .red {
+  background-color: red;
+}
