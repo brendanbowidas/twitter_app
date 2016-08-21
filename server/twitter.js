@@ -87,7 +87,6 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
       })
       result.on('end', () => {
         const tweets = JSON.parse(buffer)
-        console.log(tweets.length);
         const formattedTweets = formatTweets(tweets)
         cb(formattedTweets)
       })

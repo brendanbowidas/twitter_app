@@ -6,7 +6,7 @@
         <option v-for="filter in filters" :selected="filter.name === 'Username'" :value="filter.method">{{filter.name}}</option>
       </select>
     </label>
-    <label>How many tweets?
+    <label>Max tweets to display:
       <input type="number" value="20" min="1" max="100" v-model="count">
     </label>
     <a class="button primary" @click="getUserTweets">search</a>

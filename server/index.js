@@ -24,9 +24,7 @@ app.get('/', (req, res) => {
 
 app.get('/user-tweets/:user', (req, res) => {
   // for some reason the twitter api returns count - 1...
-  if (req.query.count > 1) {
-    req.query.count++
-  }
+
   getUserTweets(req.params.user, req.query.count, app.get('bearer_token'), (tweets) => {
     res.send(tweets)
   })
@@ -34,9 +32,7 @@ app.get('/user-tweets/:user', (req, res) => {
 })
 
 app.get('/term/:term', (req, res) => {
-  if (req.query.count > 1) {
-    req.query.count++
-  }
+
   tweetsBySearchTerm(req.params.term, req.query.count, app.get('bearer_token'), req.query.geo, (tweets) => {
     res.send(tweets)
   })

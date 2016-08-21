@@ -1,8 +1,8 @@
 <template>
-  <div id="sortable" class="row align-center tweet-container">
-    <div v-for="tweet in tweets" track-by="$index">
-        <tweet-card :data="tweet"></tweet-card>
-    </div>
+  <div id="sortable" class="row align-center">
+    <template v-for="tweet in tweets" transition="item" track-by="$index">
+      <tweet-card v-if="tweets.length"  :data="tweet"></tweet-card>
+    </template>
 
   </div>
 </template>
