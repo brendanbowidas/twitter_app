@@ -6,6 +6,7 @@ Vue.use(Vuex)
 // Define our base application state
 const state = {
   tweets: [],
+  loading: false,
 }
 
 const store = new Vuex.Store({

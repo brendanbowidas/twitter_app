@@ -48,14 +48,14 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
     }
     // if tweets are an empty array
     if (Array.isArray(tweets) && tweets.length === 0) {
-      return "This user hasn't tweeted yet!"
+      return { status: 'ERROR', msg: "No tweets found"}
     }
     // if an error response is send back from the API
     if (typeof tweets === 'object' && tweets.error && tweets.error === 'Not authorized.') {
-      return "Invalid username"
+      return { status: 'ERROR', msg: 'Invalid username'}
     }
     // If tweets is undefined
-    return 'Something went wrong!'
+    return { status: 'ERROR', msg: 'Something went wrong'}
 
   }
 

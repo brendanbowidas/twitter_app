@@ -5,4 +5,7 @@ export default {
   CLEAR_TWEETS(state) {
     state.tweets = []
   },
+  SET_LOADING(state, status) {
+    state.loading = status
+  },
 }
