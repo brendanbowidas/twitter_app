@@ -59,7 +59,7 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
 
   }
 
-// TODO: clean up the duplicate https code, client side error handling
+  // TODO: clean up the duplicate https code, client side error handling
 
 
   /**
@@ -87,6 +87,7 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
       })
       result.on('end', () => {
         const tweets = JSON.parse(buffer)
+        console.log(tweets.length);
         const formattedTweets = formatTweets(tweets)
         cb(formattedTweets)
       })
@@ -94,43 +95,39 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
   }
 
   function tweetsBySearchTerm(query, count, token, geo, cb) {
-    let geocoded = null
-    if (geo) {
-      co(function* () {
-         geocoded = yield geocode(geo)
-      })
-    }
-
-    const options = {
-      hostname: 'api.twitter.com',
-      path: `/1.1/search/tweets.json?count=${count}&q=${encodeURIComponent(query)}`,
-      headers: {
-        Authorization: `Bearer ${token}`
+    geocode(geo, (geocoded) => {
+      const options = {
+        hostname: 'api.twitter.com',
+        path: `/1.1/search/tweets.json?count=${count}&q=${encodeURIComponent(query)}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-    }
-    if (geocoded) {
-      options.path.concat(`&geocode=${geocoded}`)
-    }
-    https.get(options, (result) => {
-      let buffer = ''
-      result.setEncoding('utf8')
-      result.on('data', (data) => {
-        buffer += data
-      })
-      result.on('end', () => {
-        const tweets = JSON.parse(buffer)
-        const formattedTweets = formatTweets(tweets.statuses)
-        cb(formattedTweets)
+      if (geocoded) {
+        options.path += `&geocode=${geocoded}`
+      }
+      https.get(options, (result) => {
+        let buffer = ''
+        result.setEncoding('utf8')
+        result.on('data', (data) => {
+          buffer += data
+        })
+        result.on('end', () => {
+          const tweets = JSON.parse(buffer)
+          const formattedTweets = formatTweets(tweets.statuses)
+          cb(formattedTweets)
+        })
       })
     })
+
   }
 
 
-  function geocode(query) {
+  function geocode(query, cb) {
     geocoder.geocode(query, (err, data) => {
-      if (err) return false
+      if (err) return cb(false)
       const results = data.results[0].geometry.location
-      return `${results.lat},${results.lng},10mi`
+      return cb(`${results.lat},${results.lng},10mi`)
     })
   }
 
