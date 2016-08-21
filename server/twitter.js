@@ -87,7 +87,6 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
       })
       result.on('end', () => {
         const tweets = JSON.parse(buffer)
-        console.log(tweets.length);
         const formattedTweets = formatTweets(tweets)
         cb(formattedTweets)
       })
@@ -103,8 +102,10 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
           Authorization: `Bearer ${token}`
         }
       }
-      if (geocoded) {
-        options.path += `&geocode=${geocoded}`
+      if (geocoded.status === 'OK') {
+        options.path += `&geocode=${geocoded.msg}`
+      } else if (geocoded.status === 'ERROR') {
+        return cb(geocoded)
       }
       https.get(options, (result) => {
         let buffer = ''
@@ -126,8 +127,12 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
   function geocode(query, cb) {
     geocoder.geocode(query, (err, data) => {
       if (err) return cb(false)
-      const results = data.results[0].geometry.location
-      return cb(`${results.lat},${results.lng},10mi`)
+      // TODO: handle errors here data.results[0] is undefined
+      if (data.status === 'OK') {
+        const results = data.results[0].geometry.location
+        return cb({ status: 'OK', msg: `${results.lat},${results.lng},10mi` })
+      }
+      return cb({ status: 'ERROR', msg: 'Invalid location!'})
     })
   }
 

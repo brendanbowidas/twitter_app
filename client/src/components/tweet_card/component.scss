@@ -5,6 +5,9 @@
   padding: 8px;
   margin: 10px;
   background-color: #FFF;
+  &:hover {
+    cursor: grab;
+  }
 }
 
 .tweet-card h6 {

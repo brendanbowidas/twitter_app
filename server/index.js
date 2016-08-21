@@ -32,7 +32,6 @@ app.get('/user-tweets/:user', (req, res) => {
 })
 
 app.get('/term/:term', (req, res) => {
-
   tweetsBySearchTerm(req.params.term, req.query.count, app.get('bearer_token'), req.query.geo, (tweets) => {
     res.send(tweets)
   })
