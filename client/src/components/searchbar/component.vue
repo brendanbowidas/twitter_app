@@ -71,7 +71,7 @@ export default {
       if (this.term) {
         this.loading()
         this.clearTweets()
-        this.$http.get(`user-tweets/${this.term}?count=${this.count}`)
+        this.$http.get(`user-tweets/${this.term.replace(/#/g, '')}?count=${this.count}`)
         .then(response => {
           this.setTweets(response.data)
         })
@@ -80,7 +80,7 @@ export default {
     searchByTerm() {
       if (this.term) {
         this.loading()
-        let url = `term/${this.term}?count=${this.count}`
+        let url = `term/${this.term.replace(/#/g, '')}?count=${this.count}`
         if (this.location) {
           url += `&geo=${this.location}`
         }

@@ -59,7 +59,6 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
 
   }
 
-  // TODO: clean up the duplicate https code, client side error handling
 
 
   /**
@@ -93,6 +92,16 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
     })
   }
 
+  /**
+  * Retrieves a list of tweets for a given search term
+  *
+  * @param {String} query
+  * @param {Number} count - number of tweets to return
+  * @param {String} token - OAuth bearer token
+  * @param {String} geo - location string
+  * @param {Function<Array>} cb - callback function
+  *
+  */
   function tweetsBySearchTerm(query, count, token, geo, cb) {
     geocode(geo, (geocoded) => {
       const options = {
@@ -123,11 +132,16 @@ const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
 
   }
 
-
+/**
+ * Geocodes a location string
+ *
+ * @param {String} query
+ * @param {Function} cb
+ * @returns {Function} cb
+ */
   function geocode(query, cb) {
     geocoder.geocode(query, (err, data) => {
       if (err) return cb(false)
-      // TODO: handle errors here data.results[0] is undefined
       if (data.status === 'OK') {
         const results = data.results[0].geometry.location
         return cb({ status: 'OK', msg: `${results.lat},${results.lng},10mi` })
