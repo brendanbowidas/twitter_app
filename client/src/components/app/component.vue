@@ -1,22 +1,26 @@
 <template>
   <div>
-    <h1 class="text-center">{{msg}}</h1>
-    <div class="red text-center">hi</div>
     <searchbar></searchbar>
-    <tweets-container></tweets-container>
+    <error v-if="tweets.status && tweets.status === 'ERROR'" :msg="tweets.msg"></error>
+    <tweets-container v-if="tweets.length"></tweets-container>
   </div>
 </template>
 
 <script>
 import searchbar from '../searchbar/component.vue'
 import tweetsContainer from '../tweets_container/component.vue'
-
+import error from '../error/component.vue'
 export default {
+  vuex: {
+    getters: {
+      tweets: state => state.tweets,
+    },
+  },
   data() {
     return {
-      msg: 'hello world',
+
     }
   },
-  components: { searchbar, tweetsContainer },
+  components: { searchbar, tweetsContainer, error },
 }
 </script>
