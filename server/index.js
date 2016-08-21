@@ -23,8 +23,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/user-tweets/:user', (req, res) => {
-  // for some reason the twitter api returns count - 1...
-
   getUserTweets(req.params.user, req.query.count, app.get('bearer_token'), (tweets) => {
     res.send(tweets)
   })

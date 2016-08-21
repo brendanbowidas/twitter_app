@@ -2,7 +2,7 @@ require('dotenv').config()
 const OAuth = require('oauth').OAuth2
 const https = require('https')
 const geocoder = require('geocoder')
-const co = require('co')
+
 
 const oauth = new OAuth(process.env.API_KEY, process.env.API_SECRET,
   'https://api.twitter.com/', null, 'oauth2/token', null)
