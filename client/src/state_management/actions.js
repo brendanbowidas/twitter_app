@@ -11,3 +11,10 @@ export const clearTweets = (store) => {
 export const loading = (store) => {
   store.dispatch('SET_LOADING', true)
 }
+
+export const removeTweet = (store, index) => {
+  store.dispatch('REMOVE_TWEET', index)
+}
+export const swapTweets = (store, idxA, idxB) => {
+  store.dispatch('SWAP_TWEETS', idxA, idxB)
+}
