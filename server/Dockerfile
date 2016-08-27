@@ -1,4 +1,4 @@
-docker-compose build node && docker-compose up -d node
+#docker-compose build node && docker-compose up -d node
 
 FROM node:latest
 
