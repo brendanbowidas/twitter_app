@@ -1,4 +1,7 @@
 node_modules
 dist/*.js
 dist/*.css
+nginx/build/*.js
+nginx/build/*.css
 npm-debug.log
+.env
