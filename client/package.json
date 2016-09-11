@@ -47,6 +47,7 @@
   "author": "Brendan Bowidas",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "font-awesome": "^4.5.0",
     "foundation-sites": "^6.2.0",
     "ramda": "^0.22.1",

@@ -1,4 +1,5 @@
 /* eslint-disable */
+require('dotenv').config()
 var path = require('path')
 var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -6,7 +7,7 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 var InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 module.exports = {
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'nginx/build'),
     publicPath: '/',
     filename: 'production.bundle.min.js'
   },
@@ -15,7 +16,8 @@ module.exports = {
       NODE_ENV: 'production'
     }),
     new webpack.DefinePlugin({
-      ENV: JSON.stringify('production')
+      ENV: JSON.stringify('production'),
+      SERVER_URL: JSON.stringify(`${process.env.SERVER_ADDR}/api`)
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),

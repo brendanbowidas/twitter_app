@@ -18,18 +18,18 @@ app.use(json)
 app.use(cors())
 
 //define our routes
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('hello world')
 })
 
-app.get('/user-tweets/:user', (req, res) => {
+app.get('/api/user-tweets/:user', (req, res) => {
   getUserTweets(req.params.user, req.query.count, app.get('bearer_token'), (tweets) => {
     res.send(tweets)
   })
 
 })
 
-app.get('/term/:term', (req, res) => {
+app.get('/api/term/:term', (req, res) => {
   tweetsBySearchTerm(req.params.term, req.query.count, app.get('bearer_token'), req.query.geo, (tweets) => {
     res.send(tweets)
   })
