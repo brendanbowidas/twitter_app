@@ -1,5 +1,6 @@
 nginx:
   build: ./client/nginx
+  restart: always
   links:
     - node:node
   ports:
@@ -7,5 +8,6 @@ nginx:
 
 node:
   build: ./server
+  restart: always
   ports:
     - "nginx:3000:3000"
